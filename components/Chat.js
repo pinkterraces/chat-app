@@ -1,42 +1,64 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { collection, getDocs, addDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
 
-const Chat = ({ route, navigation }) => {
+const Chat = ({ route, navigation, db }) => {
 
   const [messages, setMessages] = useState([]); //sets the messages state
-  const { name, color } = route.params; //props sent with route
+  const { name, color, userID } = route.params; //props sent with route
 
-  //defines the title of the screen
+  
   useEffect(() => {
-    navigation.setOptions({ title: name });
+    navigation.setOptions({ title: name }); //defines the title of the screen
+
+    const messagesDatalake = collection(db, "messages");
+    const q = query(messagesDatalake, /* where("user._id", "==", userID), */ orderBy("createdAt", "desc"));
+    const unsubMessages = onSnapshot(q, (documentsSnapshot) => {
+      let newMessages = [];
+      documentsSnapshot.forEach(doc => {
+        const data = doc.data();
+        const createdAt = new Date(doc.data().createdAt.toMillis()); // Converting firebase timestamp to date
+        newMessages.push({ id: doc.id, ...data, createdAt })
+      });
+      //console.log('messages: ', messages);
+      console.log('newMessages: ', newMessages);
+      setMessages(newMessages)
+      console.log('messages: ', messages);
+    })
+
+    // Clean up code
+    return () => {
+      if (unsubMessages) unsubMessages();
+    };
+
   }, []);
 
   //loads once component mounts and sets the messages state
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
+  /*   useEffect(() => {
+      setMessages([
+        {
+          _id: 1,
+          text: 'Hello developer',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+          },
         },
-      },
-      {
-        _id: 2,
-        text: 'This is a system message',
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
-  }, []);
+        {
+          _id: 2,
+          text: 'This is a system message',
+          createdAt: new Date(),
+          system: true,
+        },
+      ]);
+    }, []); */
 
   //appends new message array to the array of existing messages
-  const onSend = (newMessages) => {
-    setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
+  const onSend = (newMessage) => {
+    addDoc(collection(db, "messages"), newMessage[0]);
   };
 
   //customises the chat bubbles
@@ -55,13 +77,14 @@ const Chat = ({ route, navigation }) => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: color }]}> 
+    <View style={[styles.container, { backgroundColor: color }]}>
       <GiftedChat
         messages={messages}
         renderBubble={renderBubble}
         onSend={messages => onSend(messages)}
         user={{
-          _id: 1
+          _id: userID,
+          name: name
         }}
       />
       {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
@@ -70,6 +93,8 @@ const Chat = ({ route, navigation }) => {
   )
 
 }
+
+export default Chat;
 
 const styles = StyleSheet.create({
   container: {
@@ -84,4 +109,3 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Chat;
