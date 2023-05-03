@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, ImageBackground, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 
 const Start = ({ navigation }) => {
 
@@ -25,17 +25,17 @@ const Start = ({ navigation }) => {
               style={[styles.colorOptions, styles.colorOption1]}
               onPress={() => setColor('#090C08')}
             ></TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.colorOptions, styles.colorOption2]}
               onPress={() => setColor('#474056')}
             ></TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.colorOptions, styles.colorOption3]}
               onPress={() => setColor('#8A95A5')}
             ></TouchableOpacity>
             <TouchableOpacity
               style={[styles.colorOptions, styles.colorOption4]}
-              onPress={() => setColor('#B9C6AE')}  
+              onPress={() => setColor('#B9C6AE')}
             ></TouchableOpacity>
           </View>
           {/* <Button
@@ -48,9 +48,11 @@ const Start = ({ navigation }) => {
           >
             <Text style={styles.buttonText}>Start Chatting</Text>
           </TouchableOpacity>
+          
         </View>
-
+        
       </View>
+      {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null} 
     </ImageBackground>
   );
 }
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   heading: {
@@ -69,14 +71,15 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: 45,
     alignSelf: 'auto',
-    marginBottom: 250
+    marginVertical: 20
   },
   chatOptions: {
     backgroundColor: '#fff',
-    height: '44%',
+    minHeight: '44%',
     width: '88%',
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    marginVertical: 20
   },
   textDefault: {
     fontSize: 16,
