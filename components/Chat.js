@@ -1,62 +1,60 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
-import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
 import { collection, getDocs, addDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
 
-const Chat = ({ route, navigation, db }) => {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const Chat = ({ route, navigation, db, isConnected }) => {
 
   const [messages, setMessages] = useState([]); //sets the messages state
   const { name, color, userID } = route.params; //props sent with route
 
-  
+  let unsubMessages;
+
   useEffect(() => {
     navigation.setOptions({ title: name }); //defines the title of the screen
 
-    const messagesDatalake = collection(db, "messages");
-    const q = query(messagesDatalake, /* where("user._id", "==", userID), */ orderBy("createdAt", "desc"));
-    const unsubMessages = onSnapshot(q, (documentsSnapshot) => {
-      let newMessages = [];
-      documentsSnapshot.forEach(doc => {
-        const data = doc.data();
-        const createdAt = new Date(doc.data().createdAt.toMillis()); // Converting firebase timestamp to date
-        newMessages.push({ id: doc.id, ...data, createdAt })
+    if (isConnected === true) {
+
+      if (unsubMessages) unsubMessages();
+      unsubMessages = null;
+
+      const messagesDatalake = collection(db, "messages");
+      const q = query(messagesDatalake, /* where("user._id", "==", userID), */ orderBy("createdAt", "desc"));
+      unsubMessages = onSnapshot(q, (documentsSnapshot) => {
+        let newMessages = [];
+        documentsSnapshot.forEach(doc => {
+          const data = doc.data();
+          const createdAt = new Date(doc.data().createdAt.toMillis()); // Converting firebase timestamp to date
+          newMessages.push({ id: doc.id, ...data, createdAt })
+        });
+        cacheMessages(newMessages);
+        setMessages(newMessages)
       });
-      //console.log('messages: ', messages);
-      console.log('newMessages: ', newMessages);
-      setMessages(newMessages)
-      console.log('messages: ', messages);
-    })
+    } else loadCachedMessages();
 
     // Clean up code
     return () => {
       if (unsubMessages) unsubMessages();
     };
 
-  }, []);
+  }, [isConnected]);
 
-  //loads once component mounts and sets the messages state
-  /*   useEffect(() => {
-      setMessages([
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-        {
-          _id: 2,
-          text: 'This is a system message',
-          createdAt: new Date(),
-          system: true,
-        },
-      ]);
-    }, []); */
+  // Handles locally cached data
+  const cacheMessages = async (messagesToCache) => {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  const loadCachedMessages = async () => {
+    const cachedMessages = await AsyncStorage.getItem("messages") || [];
+    setMessages(JSON.parse(cachedMessages));
+  }
 
-  //appends new message array to the array of existing messages
+  // Appends new message array to the array of existing messages
   const onSend = (newMessage) => {
     addDoc(collection(db, "messages"), newMessage[0]);
   };
@@ -76,6 +74,11 @@ const Chat = ({ route, navigation, db }) => {
     />
   }
 
+  const renderInputToolbar = (props) => {
+    if (isConnected) return <InputToolbar {...props} />;
+    else return null;
+   }
+
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
       <GiftedChat
@@ -86,6 +89,7 @@ const Chat = ({ route, navigation, db }) => {
           _id: userID,
           name: name
         }}
+        renderInputToolbar={renderInputToolbar}
       />
       {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
       {Platform.OS === 'ios' ? <KeyboardAvoidingView behavior="padding" /> : null}
