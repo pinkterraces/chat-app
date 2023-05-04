@@ -11,4 +11,5 @@ Receive and send messages.
 - expo install react-native-screens react-native-safe-area-context
 - npm install react-native-gifted-chat --save
 - npm install firebase@9.13.0 --save
-- expo install @react-native-async-storage/async-storage 
+- expo install @react-native-async-storage/async-storage
+- expo install @react-native-community/netinfo
