@@ -14,3 +14,5 @@ Receive and send messages.
 - expo install @react-native-async-storage/async-storage
 - expo install @react-native-community/netinfo
 - expo install expo-image-picker
+- expo install expo-location
+- expo install react-native-maps
