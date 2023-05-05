@@ -13,3 +13,4 @@ Receive and send messages.
 - npm install firebase@9.13.0 --save
 - expo install @react-native-async-storage/async-storage
 - expo install @react-native-community/netinfo
+- expo install expo-image-picker
