@@ -10,7 +10,7 @@
 
 # Description
 
-A chat app built in React Native for mobile devices. Users can enter a chat room, and share images from their library, take a photo and their location. Used as a project to understand React Native and Expo development, as well as Google Firestore and GiftChat library for React Native.
+A chat app built in React Native for mobile devices. Users can enter a chat room, and share images from their library, take a photo and their location - the text data and assets are stored in Google Firebase. Used as a project to understand React Native and Expo development, as well as Google Firestore and GiftChat library for React Native.
 
 # Features
 - Choose chat background colour.
