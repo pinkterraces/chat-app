@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
+import MapView from 'react-native-maps';
 import { collection, getDocs, addDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Chat = ({ route, navigation, db, isConnected }) => {
+import CustomActions from './CustomActions';
+
+const Chat = ({ route, navigation, db, isConnected, storage }) => {
 
   const [messages, setMessages] = useState([]); //sets the messages state
   const { name, color, userID } = route.params; //props sent with route
@@ -77,7 +80,35 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   const renderInputToolbar = (props) => {
     if (isConnected) return <InputToolbar {...props} />;
     else return null;
-   }
+  }
+
+  const renderCustomActions = (props) => {
+    return <CustomActions userID={userID} storage={storage} {...props} />;
+  };
+
+  const renderCustomView = (props) => {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{
+            width: 150,
+            height: 100,
+            borderRadius: 13,
+            margin: 3
+          }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
 
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
@@ -85,11 +116,13 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         messages={messages}
         renderBubble={renderBubble}
         onSend={messages => onSend(messages)}
+        renderInputToolbar={renderInputToolbar}
+        renderActions={renderCustomActions}
+        renderCustomView={renderCustomView}
         user={{
           _id: userID,
           name: name
         }}
-        renderInputToolbar={renderInputToolbar}
       />
       {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
       {Platform.OS === 'ios' ? <KeyboardAvoidingView behavior="padding" /> : null}
