@@ -29,6 +29,12 @@ A chat app built in React Native for mobile devices. Users can enter a chat room
 - Tests can be run on iOS emulator, Android Studio with emulator, or Expo on local device (personal experience say local device was the most reliable testing environment).
 
 # Packages:
+
+NOTE: EPXO need to run on Node.js Version 16.9.0. Do this as follows:
+- nvm install 16.19.0
+- nvm use 16.19.0
+- nvm alias default 16.19.0
+
 - npm install --save @react-navigation/native @react-navigation/native-stack
 - expo install react-native-screens react-native-safe-area-context
 - npm install react-native-gifted-chat --save
