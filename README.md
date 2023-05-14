@@ -30,12 +30,6 @@ A chat app built in React Native for mobile devices. Users can enter a chat room
 
 # Packages:
 
-NOTE: EPXO need to run on Node.js Version 16.9.0. Do this as follows:
-- nvm install 16.19.0
-- nvm use 16.19.0
-- nvm alias default 16.19.0
-
-
 - npm install --save @react-navigation/native @react-navigation/native-stack
 - expo install react-native-screens react-native-safe-area-context
 - npm install react-native-gifted-chat --save
@@ -45,3 +39,8 @@ NOTE: EPXO need to run on Node.js Version 16.9.0. Do this as follows:
 - expo install expo-image-picker
 - expo install expo-location
 - expo install react-native-maps
+
+NOTE: EPXO need to run on Node.js Version 16.9.0. Do this as follows:
+- nvm install 16.19.0
+- nvm use 16.19.0
+- nvm alias default 16.19.0
