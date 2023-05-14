@@ -40,7 +40,7 @@ A chat app built in React Native for mobile devices. Users can enter a chat room
 - expo install expo-location
 - expo install react-native-maps
 
-NOTE: EPXO need to run on Node.js Version 16.9.0. Do this as follows:
+NOTE: EPXO needs to run on Node.js Version 16.9.0. Do this as follows:
 - nvm install 16.19.0
 - nvm use 16.19.0
 - nvm alias default 16.19.0
