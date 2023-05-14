@@ -35,6 +35,7 @@ NOTE: EPXO need to run on Node.js Version 16.9.0. Do this as follows:
 - nvm use 16.19.0
 - nvm alias default 16.19.0
 
+
 - npm install --save @react-navigation/native @react-navigation/native-stack
 - expo install react-native-screens react-native-safe-area-context
 - npm install react-native-gifted-chat --save
