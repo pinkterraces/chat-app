@@ -1,34 +1,28 @@
-# chat-app
+# Chat App
 
-# Stack and Tools
-
-- React Native.
-- Expo.
-- Google Firestore Database.
-- Google Firebase Authentication.
-- React Native Gifted Chat.
-
-# Description
+## Summary
 
 A chat app built in React Native for mobile devices. Users can enter a chat room, and share images from their library, take a photo and their location - the text data and assets are stored in Google Firebase. Used as a project to understand React Native and Expo development, as well as Google Firestore and GiftChat library for React Native.
 
-# Features
-- Choose chat background colour.
-- Receive and send text messages, photos and location data.
-- Take a photo using device camera
+# Tech Stack
 
-# Setting up the dev environment
+- React Native
+- Expo
+- Google Firestore Database
+- Google Firebase Authentication
+- React Native Gifted Chat
 
-- Clone the repository: https://github.com/pinkterraces/chat-app.
-- Run npm init.
+## Getting Started
+
+- Clone the repository: https://github.com/pinkterraces/chat-app
+- In CLI run `npm install`
 - Install Expo CLI as a global npm package (npm install -g expo-cli).
-- Install packages.
 - Create an Expo account at https://expo.dev/.
 - Create database https://firebase.google.com/ (ensure in the “Rules” tab the function is set to “allow read, write: if true;”).
 - Update App.js with your personal firebaseConfig.
-- Tests can be run on iOS emulator, Android Studio with emulator, or Expo on local device (personal experience say local device was the most reliable testing environment).
+- Tests can be run on iOS emulator, Android Studio with emulator, or Expo on local device (personal experience says local device was the most reliable testing environment).
 
-# Packages:
+## Packages
 
 - npm install --save @react-navigation/native @react-navigation/native-stack
 - expo install react-native-screens react-native-safe-area-context
@@ -40,7 +34,14 @@ A chat app built in React Native for mobile devices. Users can enter a chat room
 - expo install expo-location
 - expo install react-native-maps
 
-NOTE: EPXO needs to run on Node.js Version 16.9.0. Do this as follows:
-- nvm install 16.19.0
-- nvm use 16.19.0
-- nvm alias default 16.19.0
+### Note 
+
+EPXO needs to run on Node.js Version 16.9.0. Do this as follows:
+- `nvm install 16.19.0`
+- `nvm use 16.19.0`
+- `nvm alias default 16.19.0`
+
+## Features
+- Choose chat background colour.
+- Receive and send text messages, photos and location data.
+- Take a photo using device camera
